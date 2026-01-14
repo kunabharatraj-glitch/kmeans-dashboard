@@ -4,7 +4,7 @@ import joblib
 import matplotlib.pyplot as plt
 
 # Load data and models
-data = pd.read_csv("student_performance.csv")
+data = pd.read_csv("data.csv")
 kmeans = joblib.load("kmeans_model.pkl")
 scaler = joblib.load("scaler.pkl")
 
@@ -67,3 +67,4 @@ elif menu == "Analytics & Performance":
     fig, ax = plt.subplots()
     data["Cluster"].value_counts().plot(kind="pie", autopct="%1.1f%%", ax=ax)
     st.pyplot(fig)
+
