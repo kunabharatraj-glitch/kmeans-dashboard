@@ -24,18 +24,21 @@ if menu == "Study Dashboard":
 
     student_id = st.selectbox("Select Student ID", data.index)
 
+    # Select numeric data only
     numeric_data = data.select_dtypes(include=["int64", "float64"])
 
+    # Remove unwanted columns if present
     for col in ["Cluster", "cluster", "target", "label"]:
         if col in numeric_data.columns:
             numeric_data = numeric_data.drop(columns=[col])
 
+    # Select student row
     student_data = numeric_data.iloc[[student_id]]
 
-    expected_features = scaler.n_features_in_
-    student_data = student_data.iloc[:, :expected_features]
+    # IMPORTANT: convert to NumPy array
+    scaled_data = scaler.transform(student_data.values)
 
-    scaled_data = scaler.transform(student_data)
+    # Predict cluster
     cluster = kmeans.predict(scaled_data)[0]
 
     st.subheader("Student Details")
@@ -51,7 +54,6 @@ if menu == "Study Dashboard":
         st.info("Average Performance. Maintain consistency.")
     else:
         st.success("Excellent Performance. Try advanced learning material.")
-
 
 
 # ---------------- ADMIN DASHBOARD ----------------
@@ -79,6 +81,7 @@ elif menu == "Analytics & Performance":
     fig, ax = plt.subplots()
     data["Cluster"].value_counts().plot(kind="pie", autopct="%1.1f%%", ax=ax)
     st.pyplot(fig)
+
 
 
 
