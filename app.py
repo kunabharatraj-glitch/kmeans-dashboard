@@ -24,8 +24,13 @@ if menu == "Study Dashboard":
 
     student_id = st.selectbox("Select Student ID", data.index)
 
-    student_data = data.loc[[student_id]]
-    scaled_data = scaler.transform(student_data)
+   #------ Select only numeric columns (same as training)----------------
+numeric_cols = data.select_dtypes(include=["int64", "float64"]).columns
+
+student_data = data.loc[[student_id], numeric_cols]
+
+scaled_data = scaler.transform(student_data)
+
     cluster = kmeans.predict(scaled_data)[0]
 
     st.subheader("Student Details")
@@ -67,4 +72,5 @@ elif menu == "Analytics & Performance":
     fig, ax = plt.subplots()
     data["Cluster"].value_counts().plot(kind="pie", autopct="%1.1f%%", ax=ax)
     st.pyplot(fig)
+
 
